@@ -1,15 +1,8 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Home from "./pages/Home";
 
 function App() {
-  return (
-    <div className="text-3xl font-bold text-blue-600">
-  Tailwind is working!
-  Helllo eveyone
-</div>
-
-
-  );
+  return <Home />;
 }
 
 export default App;
