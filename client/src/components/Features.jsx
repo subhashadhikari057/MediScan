@@ -1,5 +1,16 @@
 import React from "react";
+import { motion } from "framer-motion";
 import { Brain, Camera, Search, Lock } from "lucide-react";
+
+// Animation configuration
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.2, duration: 0.6 },
+  }),
+};
 
 const features = [
   {
@@ -34,35 +45,42 @@ const features = [
 
 const Features = () => {
   return (
-    <section className="py-24 px-4 md:px-8 bg-gradient-to-b from-white to-teal-50/30">
+    <section className="py-24 px-6 md:px-12 bg-gradient-to-b from-white to-teal-50 dark:from-gray-950 dark:to-gray-900">
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+        <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4">
           <span className="bg-gradient-to-r from-teal-600 to-cyan-500 bg-clip-text text-transparent">
             Key Features
           </span>
         </h2>
-        <p className="text-lg text-gray-600 mb-16">
+        <p className="text-lg text-gray-600 dark:text-gray-300 mb-16">
           Designed for accessibility, accuracy, and ease of use.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {features.map((feature, index) => (
-            <div
+            <motion.div
               key={index}
-              className="flex items-start gap-4 bg-white p-6 rounded-xl shadow hover:shadow-md transition"
+              custom={index}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={fadeInUp}
+              className="flex items-start gap-5 bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-lg transition-all"
             >
               <div
-                className={`p-3 rounded-lg bg-gradient-to-r ${feature.bg}`}
+                className={`p-3 rounded-lg bg-gradient-to-r ${feature.bg} shadow-md`}
               >
                 {feature.icon}
               </div>
               <div className="text-left">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 text-sm">{feature.description}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">
+                  {feature.description}
+                </p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
