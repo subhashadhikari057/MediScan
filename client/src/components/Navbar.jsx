@@ -139,12 +139,19 @@ const Navbar = () => {
                   >
                     Dashboard
                   </Link>
+                  <Link
+      to="/profile"
+      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+    >
+      My Profile
+    </Link>
                   <button
                     onClick={logout}
                     className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     Logout
                   </button>
+                  
                 </div>
               )}
             </div>

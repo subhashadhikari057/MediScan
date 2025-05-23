@@ -6,6 +6,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import { Toaster } from "react-hot-toast"; // ✅ Add this
 import CompleteProfile from "./pages/CompleteProfile"; // Adjust path as needed
+import Profile from "pages/Profile";
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/complete-profile" element={<CompleteProfile />} />
+        <Route path="/profile" element={<Profile />} />
+
       </Routes>
     </Router>
   );

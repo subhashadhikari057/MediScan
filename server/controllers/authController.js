@@ -147,3 +147,56 @@ exports.completeProfile = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err });
   }
 };
+
+exports.getUserProfile = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ message: "No token provided" });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error("Profile Fetch Error:", err);
+    res.status(500).json({ message: "Failed to fetch profile", error: err });
+  }
+};
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const { token } = req.headers; // Get token from headers
+    const { name, location, password } = req.body;
+
+    if (!token) return res.status(401).json({ message: "Unauthorized" });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (name) user.name = name;
+    if (location) user.location = location;
+    if (password) user.password = await bcrypt.hash(password, 10);
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        location: user.location,
+        specialization: user.specialization,
+        licenseNumber: user.licenseNumber,
+        photoURL: user.photoURL,
+      },
+    });
+
+  } catch (err) {
+    console.error("Update profile error:", err);
+    res.status(500).json({ message: "Server error", error: err });
+  }
+};
