@@ -162,42 +162,83 @@ const Navbar = () => {
         </Button>
       </div>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div ref={dropdownRef} className="md:hidden bg-white dark:bg-gray-800 px-4 py-4 shadow-md rounded-b-lg mt-2 space-y-4">
-          {navItems.map((item, index) =>
-            item === "Home" ? (
-              <Link key={index} to="/" onClick={() => setMobileMenuOpen(false)} className="block text-gray-700 dark:text-white">
-                {item}
-              </Link>
-            ) : (
-              <button
-                key={index}
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  document.getElementById(item.toLowerCase().replace(/\s+/g, "-"))?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="block w-full text-left text-gray-700 dark:text-white"
-              >
-                {item}
-              </button>
-            )
-          )}
-          {user ? (
-            <>
-              <Link to={user.role === "doctor" ? "/doctor-dashboard" : "/dashboard"} onClick={() => setMobileMenuOpen(false)} className="block text-primary">
-                Dashboard
-              </Link>
-              <button onClick={logout} className="text-red-600">Logout</button>
-            </>
-          ) : (
-            <>
-              <Link to="/signin" onClick={() => setMobileMenuOpen(false)} className="block text-primary">Login</Link>
-              <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="block text-primary">Sign Up</Link>
-            </>
-          )}
-        </div>
-      )}
+{/* Mobile Menu */}
+{mobileMenuOpen && (
+  <div
+    ref={dropdownRef}
+    className="md:hidden bg-white dark:bg-gray-800 px-4 py-4 shadow-md rounded-b-lg mt-2 space-y-4"
+  >
+    {navItems.map((item, index) =>
+      item === "Home" ? (
+        <Link
+          key={index}
+          to="/"
+          onClick={() => setMobileMenuOpen(false)}
+          className="block text-gray-700 dark:text-white"
+        >
+          {item}
+        </Link>
+      ) : (
+        <button
+          key={index}
+          onClick={() => {
+            setMobileMenuOpen(false);
+            document
+              .getElementById(item.toLowerCase().replace(/\s+/g, "-"))
+              ?.scrollIntoView({ behavior: "smooth" });
+          }}
+          className="block w-full text-left text-gray-700 dark:text-white"
+        >
+          {item}
+        </button>
+      )
+    )}
+
+    {/* Dark Mode Toggle */}
+    <div className="flex items-center gap-2 pt-2">
+      <button
+        onClick={toggleDarkMode}
+        className="flex items-center gap-2 text-primary dark:text-secondary hover:text-secondary"
+      >
+        {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+        <span>Toggle Dark Mode</span>
+      </button>
+    </div>
+
+    {user ? (
+      <>
+        <Link
+          to={user.role === "doctor" ? "/doctor-dashboard" : "/dashboard"}
+          onClick={() => setMobileMenuOpen(false)}
+          className="block text-primary"
+        >
+          Dashboard
+        </Link>
+        <button onClick={logout} className="text-red-600">
+          Logout
+        </button>
+      </>
+    ) : (
+      <>
+        <Link
+          to="/signin"
+          onClick={() => setMobileMenuOpen(false)}
+          className="block text-primary"
+        >
+          Login
+        </Link>
+        <Link
+          to="/signup"
+          onClick={() => setMobileMenuOpen(false)}
+          className="block text-primary"
+        >
+          Sign Up
+        </Link>
+      </>
+    )}
+  </div>
+)}
+
     </header>
   );
 };
