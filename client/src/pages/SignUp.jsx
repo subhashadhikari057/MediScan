@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Facebook, Twitter } from "lucide-react";
+import { Facebook, Twitter, Eye, EyeOff } from "lucide-react";
 import Navbar from "components/Navbar";
 import Footer from "components/Footer";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const SignUp = () => {
   const [role, setRole] = useState("user");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,6 +22,7 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    setError(""); // clear error on change
     setFormData((prev) => ({
       ...prev,
       [e.target.id]: e.target.value,
@@ -32,11 +37,12 @@ const SignUp = () => {
         `${process.env.REACT_APP_API_URL}/api/auth/register`,
         payload
       );
-      alert("Registration successful! Please login.");
+      toast.success("🎉 Registration successful! Please login.");
       navigate("/signin");
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Registration failed");
+      const message = err.response?.data?.message || "Registration failed";
+      setError(message);
     }
   };
 
@@ -55,6 +61,12 @@ const SignUp = () => {
             <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-8">
               Create Your MediScan Account
             </h2>
+
+            {error && (
+              <div className="mb-4 text-red-600 bg-red-100 border border-red-300 rounded p-3 text-sm">
+                {error}
+              </div>
+            )}
 
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
@@ -106,15 +118,25 @@ const SignUp = () => {
                 <label htmlFor="password" className="block text-gray-700 dark:text-gray-200 mb-2">
                   Password
                 </label>
-                <input
-                  type="password"
-                  id="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  placeholder="••••••••"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    placeholder="••••••••"
+                    className="w-full px-4 py-3 pr-10 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 dark:text-gray-300"
+                    aria-label="Toggle Password Visibility"
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
               </div>
 
               {role === "doctor" && (
@@ -164,12 +186,10 @@ const SignUp = () => {
 
               <div className="flex flex-col gap-3">
                 <button className="flex items-center justify-center gap-2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-                  <Facebook className="w-4 h-4" />
-                  Continue with Facebook
+                  <Facebook className="w-4 h-4" /> Continue with Facebook
                 </button>
                 <button className="flex items-center justify-center gap-2 bg-sky-400 text-white py-2 rounded-lg hover:bg-sky-500 transition">
-                  <Twitter className="w-4 h-4" />
-                  Continue with Twitter
+                  <Twitter className="w-4 h-4" /> Continue with Twitter
                 </button>
               </div>
             </form>
