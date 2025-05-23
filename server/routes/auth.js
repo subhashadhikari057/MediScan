@@ -1,18 +1,22 @@
 const express = require("express");
-const { registerUser, loginUser, googleSignup } = require("../controllers/authController");
-const { completeProfile } = require("../controllers/authController");
-const { getUserProfile } = require("../controllers/authController");
-const { updateProfile } = require("../controllers/authController");
-
-
+const {
+  registerUser,
+  loginUser,
+  googleSignup,
+  completeProfile,
+  getUserProfile,
+  updateProfile,
+  changePassword, // ✅ Import this
+} = require("../controllers/authController");
 
 const router = express.Router();
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.post("/google", googleSignup); // <-- add this route
+router.post("/google", googleSignup);
 router.post("/complete-profile", completeProfile);
 router.get("/profile", getUserProfile);
-router.post("/update-profile", updateProfile); // ✅ Add this
+router.post("/update-profile", updateProfile);
+router.post("/change-password", changePassword); // ✅ Add this new route
 
 module.exports = router;

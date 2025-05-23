@@ -166,8 +166,8 @@ exports.getUserProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const { token } = req.headers; // Get token from headers
-    const { name, location, password } = req.body;
+    const token = req.headers.authorization?.split(" ")[1];
+    const { name, location, password, specialization } = req.body; // ✅ include specialization
 
     if (!token) return res.status(401).json({ message: "Unauthorized" });
 
@@ -177,7 +177,12 @@ exports.updateProfile = async (req, res) => {
 
     if (name) user.name = name;
     if (location) user.location = location;
-    if (password) user.password = await bcrypt.hash(password, 10);
+    if (specialization && user.role === "doctor") {
+      user.specialization = specialization; // ✅ update specialization
+    }
+    if (password) {
+      user.password = await bcrypt.hash(password, 10);
+    }
 
     await user.save();
 
@@ -198,5 +203,32 @@ exports.updateProfile = async (req, res) => {
   } catch (err) {
     console.error("Update profile error:", err);
     res.status(500).json({ message: "Server error", error: err });
+  }
+};
+
+exports.changePassword = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    const { oldPassword, newPassword } = req.body;
+
+    if (!token) return res.status(401).json({ message: "Unauthorized" });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Old password is incorrect" });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedNewPassword;
+    await user.save();
+
+    return res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error("Password change error:", error);
+    return res.status(500).json({ message: "Server error", error });
   }
 };
