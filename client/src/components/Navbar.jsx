@@ -115,7 +115,7 @@ const Navbar = () => {
           )}
         </nav>
 
-        {/* Right */}
+        {/* Desktop Right Actions */}
         <div className="hidden md:flex items-center gap-4 relative">
           <button onClick={toggleDarkMode} className="text-primary dark:text-secondary hover:text-secondary p-2">
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -133,25 +133,9 @@ const Navbar = () => {
                 <div className="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2 z-50">
                   <span className="block px-4 py-2 text-sm text-gray-600 dark:text-white font-medium">{user.name}</span>
                   <hr className="my-1 border-gray-200 dark:border-gray-700" />
-                  <Link
-                    to={user.role === "doctor" ? "/doctor-dashboard" : "/dashboard"}
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-      to="/profile"
-      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-    >
-      My Profile
-    </Link>
-                  <button
-                    onClick={logout}
-                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  >
-                    Logout
-                  </button>
-                  
+                  <Link to={user.role === "doctor" ? "/doctor-dashboard" : "/dashboard"} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Dashboard</Link>
+                  <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">My Profile</Link>
+                  <button onClick={logout} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700">Logout</button>
                 </div>
               )}
             </div>
@@ -163,89 +147,58 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile toggle */}
-        <Button variant="ghost" className="md:hidden p-1" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-          {mobileMenuOpen ? <X className="w-6 h-6 text-gray-800 dark:text-white" /> : <Menu className="w-6 h-6 text-gray-800 dark:text-white" />}
-        </Button>
+        {/* Mobile: Dark Mode + Hamburger */}
+        <div className="md:hidden flex items-center gap-2 ml-auto">
+          <button onClick={toggleDarkMode} className="text-primary dark:text-secondary p-2" title="Toggle Dark Mode">
+            {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
+          <Button variant="ghost" className="p-1" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X className="w-6 h-6 text-gray-800 dark:text-white" /> : <Menu className="w-6 h-6 text-gray-800 dark:text-white" />}
+          </Button>
+        </div>
       </div>
 
-{/* Mobile Menu */}
-{mobileMenuOpen && (
-  <div
-    ref={dropdownRef}
-    className="md:hidden bg-white dark:bg-gray-800 px-4 py-4 shadow-md rounded-b-lg mt-2 space-y-4"
-  >
-    {navItems.map((item, index) =>
-      item === "Home" ? (
-        <Link
-          key={index}
-          to="/"
-          onClick={() => setMobileMenuOpen(false)}
-          className="block text-gray-700 dark:text-white"
-        >
-          {item}
-        </Link>
-      ) : (
-        <button
-          key={index}
-          onClick={() => {
-            setMobileMenuOpen(false);
-            document
-              .getElementById(item.toLowerCase().replace(/\s+/g, "-"))
-              ?.scrollIntoView({ behavior: "smooth" });
-          }}
-          className="block w-full text-left text-gray-700 dark:text-white"
-        >
-          {item}
-        </button>
-      )
-    )}
+      {/* Mobile Dropdown */}
+      {mobileMenuOpen && (
+        <div ref={dropdownRef} className="md:hidden bg-white dark:bg-gray-800 px-4 py-4 shadow-md rounded-b-lg mt-2 space-y-4">
+          {navItems.map((item, index) =>
+            item === "Home" ? (
+              <Link
+                key={index}
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-gray-700 dark:text-white"
+              >
+                {item}
+              </Link>
+            ) : (
+              <button
+                key={index}
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  document.getElementById(item.toLowerCase().replace(/\s+/g, "-"))?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="block w-full text-left text-gray-700 dark:text-white"
+              >
+                {item}
+              </button>
+            )
+          )}
 
-    {/* Dark Mode Toggle */}
-    <div className="flex items-center gap-2 pt-2">
-      <button
-        onClick={toggleDarkMode}
-        className="flex items-center gap-2 text-primary dark:text-secondary hover:text-secondary"
-      >
-        {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-        <span>Toggle Dark Mode</span>
-      </button>
-    </div>
-
-    {user ? (
-      <>
-        <Link
-          to={user.role === "doctor" ? "/doctor-dashboard" : "/dashboard"}
-          onClick={() => setMobileMenuOpen(false)}
-          className="block text-primary"
-        >
-          Dashboard
-        </Link>
-        <button onClick={logout} className="text-red-600">
-          Logout
-        </button>
-      </>
-    ) : (
-      <>
-        <Link
-          to="/signin"
-          onClick={() => setMobileMenuOpen(false)}
-          className="block text-primary"
-        >
-          Login
-        </Link>
-        <Link
-          to="/signup"
-          onClick={() => setMobileMenuOpen(false)}
-          className="block text-primary"
-        >
-          Sign Up
-        </Link>
-      </>
-    )}
-  </div>
-)}
-
+          {user ? (
+            <>
+              <Link to={user.role === "doctor" ? "/doctor-dashboard" : "/dashboard"} onClick={() => setMobileMenuOpen(false)} className="block text-primary dark:text-cyan-400">Dashboard</Link>
+              <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="block text-primary dark:text-cyan-400">My Profile</Link>
+              <button onClick={logout} className="block text-left text-red-600">Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/signin" onClick={() => setMobileMenuOpen(false)} className="block text-primary">Login</Link>
+              <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="block text-primary">Sign Up</Link>
+            </>
+          )}
+        </div>
+      )}
     </header>
   );
 };

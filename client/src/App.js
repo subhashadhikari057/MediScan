@@ -1,42 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
-import { Toaster } from "react-hot-toast"; // ✅ Add this
-import CompleteProfile from "./pages/CompleteProfile"; // Adjust path as needed
-import Profile from "pages/Profile";
-import DoctorDiscovery from "pages/DoctorDiscovery";
-import DoctorDetail from "pages/DoctorDetail";
+import CompleteProfile from "./pages/CompleteProfile";
+import Profile from "./pages/Profile";
+import DoctorDiscovery from "./pages/DoctorDiscovery";
+import DoctorDetail from "./pages/DoctorDetail";
+import MediScanSplash from "./components/MediScanSplash";
+import { Toaster } from "react-hot-toast";
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    const hasShownSplash = sessionStorage.getItem("splashShown");
+    if (hasShownSplash) {
+      setShowSplash(false);
+    }
+  }, []);
+
+  const handleSplashComplete = () => {
+    sessionStorage.setItem("splashShown", "true");
+    setShowSplash(false);
+  };
+
   return (
     <Router>
       <ScrollToTop />
-      <Toaster // ✅ Minimal themed toast setup
+      <Toaster
         position="top-right"
         toastOptions={{
           style: {
-            background: "#0f766e", // Tailwind teal-700
+            background: "#0f766e",
             color: "#fff",
             fontSize: "0.875rem",
             borderRadius: "10px",
           },
         }}
       />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/complete-profile" element={<CompleteProfile />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/doctors" element={<DoctorDiscovery />} />
-        <Route path="/doctors/:id" element={<DoctorDetail />} />
 
-
-
-      </Routes>
+      {showSplash ? (
+        <MediScanSplash onComplete={handleSplashComplete} />
+      ) : (
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/complete-profile" element={<CompleteProfile />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/doctors" element={<DoctorDiscovery />} />
+          <Route path="/doctors/:id" element={<DoctorDetail />} />
+        </Routes>
+      )}
     </Router>
   );
 }
