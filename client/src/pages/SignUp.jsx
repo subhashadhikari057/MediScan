@@ -14,6 +14,7 @@ const SignUp = () => {
     specialization: "",
     licenseNumber: "",
   });
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -26,13 +27,9 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const payload = {
-        ...formData,
-        role,
-      };
-
+      const payload = { ...formData, role };
       const { data } = await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/register`,
+        `${process.env.REACT_APP_API_URL}/api/auth/register`,
         payload
       );
       alert("Registration successful! Please login.");

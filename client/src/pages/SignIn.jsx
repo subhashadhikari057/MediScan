@@ -16,7 +16,8 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, formData);
+      const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, formData);
+
 
       // Save token and user data
       localStorage.setItem("token", data.token);
