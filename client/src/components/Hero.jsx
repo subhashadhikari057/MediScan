@@ -9,6 +9,9 @@ import {
   Globe,
   ChevronRight,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+
 
 // Utility: className combiner
 const cn = (...classes) => classes.filter(Boolean).join(" ");
@@ -50,6 +53,7 @@ const Hero = () => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
+  const navigate = useNavigate();
 
   return (
     <section className="relative min-h-[90vh] pt-28 px-6 md:px-12 lg:px-24 bg-gradient-to-br from-teal-50 to-white dark:from-gray-900 dark:to-gray-950 text-center lg:text-left flex flex-col lg:flex-row items-center justify-between gap-12">
@@ -101,10 +105,10 @@ const Hero = () => {
             <ChevronRight className="h-4 w-4" />
           </Button>
 
-          <Button variant="outline" onClick={() => scrollTo("doctor-search")}>
-            <Search className="h-5 w-5" />
-            Find Doctor
-          </Button>
+          <Button variant="outline" onClick={() => navigate("/doctors")}>
+  <Search className="h-5 w-5" />
+  Find Doctor
+</Button>
         </motion.div>
 
         <motion.div

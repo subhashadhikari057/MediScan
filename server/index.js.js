@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const doctorRoutes = require("./routes/doctorRoutes");
 
 dotenv.config();
 
@@ -20,5 +21,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/doctors", doctorRoutes);
+
+
 
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));

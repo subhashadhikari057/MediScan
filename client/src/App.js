@@ -7,6 +7,8 @@ import SignUp from "./pages/SignUp";
 import { Toaster } from "react-hot-toast"; // ✅ Add this
 import CompleteProfile from "./pages/CompleteProfile"; // Adjust path as needed
 import Profile from "pages/Profile";
+import DoctorDiscovery from "pages/DoctorDiscovery";
+import DoctorDetail from "pages/DoctorDetail";
 
 function App() {
   return (
@@ -29,6 +31,10 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/complete-profile" element={<CompleteProfile />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/doctors" element={<DoctorDiscovery />} />
+        <Route path="/doctors/:id" element={<DoctorDetail />} />
+
+
 
       </Routes>
     </Router>
