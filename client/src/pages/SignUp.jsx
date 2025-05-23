@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Facebook, Twitter, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import Navbar from "components/Navbar";
 import Footer from "components/Footer";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../firebase";
 
 const SignUp = () => {
   const [role, setRole] = useState("user");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -19,24 +22,16 @@ const SignUp = () => {
     licenseNumber: "",
   });
 
-  const navigate = useNavigate();
-
   const handleChange = (e) => {
-    setError(""); // clear error on change
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.id]: e.target.value,
-    }));
+    setError("");
+    setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const payload = { ...formData, role };
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/auth/register`,
-        payload
-      );
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/register`, payload);
       toast.success("🎉 Registration successful! Please login.");
       navigate("/signin");
     } catch (err) {
@@ -45,6 +40,35 @@ const SignUp = () => {
       setError(message);
     }
   };
+
+  const handleGoogleSignUp = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    // ✅ Call backend to save initial user
+    await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/google`, {
+      name: user.displayName,
+      email: user.email,
+      photoURL: user.photoURL,
+    });
+
+    // ✅ Save to localStorage
+    localStorage.setItem("googleUser", JSON.stringify({
+      name: user.displayName,
+      email: user.email,
+      photoURL: user.photoURL,
+    }));
+
+    toast.success("Almost done! Complete your profile.");
+    navigate("/complete-profile");
+  } catch (error) {
+    console.error("Google Sign Up Error:", error);
+    toast.error("Google sign-up failed. Try again.");
+  }
+};
+
+
 
   return (
     <>
@@ -185,11 +209,13 @@ const SignUp = () => {
               </div>
 
               <div className="flex flex-col gap-3">
-                <button className="flex items-center justify-center gap-2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-                  <Facebook className="w-4 h-4" /> Continue with Facebook
-                </button>
-                <button className="flex items-center justify-center gap-2 bg-sky-400 text-white py-2 rounded-lg hover:bg-sky-500 transition">
-                  <Twitter className="w-4 h-4" /> Continue with Twitter
+                <button
+                  type="button"
+                  onClick={handleGoogleSignUp}
+                  className="flex items-center justify-center gap-2 bg-teal-800 text-white py-2 rounded-lg hover:bg-teal-400 transition"
+                >
+                  <img src="/assets/google.svg" alt="Google" className="w-6 h-6" />
+                  Continue with Google
                 </button>
               </div>
             </form>
