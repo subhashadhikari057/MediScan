@@ -5,6 +5,9 @@ import axios from "axios";
 import { CalendarClock, Mail, X, Check } from "lucide-react";
 
 const formatTimeTo12Hour = (timeStr) => {
+  if (!timeStr || typeof timeStr !== "string" || !timeStr.includes(":")) {
+    return "Invalid time";
+  }
   const [hour, minute] = timeStr.split(":");
   const date = new Date();
   date.setHours(+hour);

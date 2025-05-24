@@ -17,6 +17,10 @@ import RoleRoute from "./components/RoleRoute";
 import Documentation from "./pages/Documentation";
 import BookAppointment from "./pages/BookAppointment";
 import AdminCleanupLogs from "./pages/AdminCleanupLogs";
+import ManageUsers from "./pages/ManageUsers";
+import ManageDoctors from "./pages/ManageDoctors";
+import ManageAppointments from "./pages/ManageAppointments";
+
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -71,6 +75,9 @@ function App() {
             path="/admin-dashboard"
             element={<RoleRoute allowedRoles={["admin"]} element={<AdminDashboard />} />}
           />
+          <Route path="/admin/manage-users" element={<RoleRoute allowedRoles={["admin"]} element={<ManageUsers />} />} />
+<Route path="/admin/manage-doctors" element={<RoleRoute allowedRoles={["admin"]} element={<ManageDoctors />} />} />
+<Route path="/admin/manage-appointments" element={<RoleRoute allowedRoles={["admin"]} element={<ManageAppointments />} />} />
           <Route
             path="/doctor-dashboard"
             element={<RoleRoute allowedRoles={["doctor"]} element={<DoctorDashboard />} />}
