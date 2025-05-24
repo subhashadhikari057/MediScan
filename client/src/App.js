@@ -13,6 +13,7 @@ import { Toaster } from "react-hot-toast";
 import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
+import RoleRoute from "./components/RoleRoute";
 
 
 
@@ -65,9 +66,9 @@ function App() {
           <Route path="/doctors" element={<DoctorDiscovery />} />
           <Route path="/doctors/:id" element={<DoctorDetail />} />
           
-          <Route path="/dashboard" element={<UserDashboard />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
+          <Route path="/dashboard" element={<RoleRoute allowedRoles={["user"]} element={<UserDashboard />} />} />
+          <Route path="/admin-dashboard" element={<RoleRoute allowedRoles={["admin"]} element={<AdminDashboard />} />} />
+          <Route path="/doctor-dashboard" element={<RoleRoute allowedRoles={["doctor"]} element={<DoctorDashboard />} />} />
         </Routes>
       )}
     </Router>
