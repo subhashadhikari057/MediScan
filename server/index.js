@@ -9,8 +9,6 @@ const dashboardRoutes = require("./routes/dashboardRoutes");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/adminRoutes");
 
-
-
 dotenv.config();
 
 const app = express();
@@ -37,8 +35,8 @@ app.use("/api/appointments", appointmentRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/admin", adminRoutes);
 
-
-
+// ✅ Cron job to auto-delete cancelled appointments
+require("./scheduler");
 
 // Start Server
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
