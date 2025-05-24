@@ -7,6 +7,9 @@ const doctorRoutes = require("./routes/doctorRoutes");
 const appointmentRoutes = require("./routes/appointment");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const authRoutes = require("./routes/auth");
+const adminRoutes = require("./routes/adminRoutes");
+
+
 
 dotenv.config();
 
@@ -32,6 +35,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Start Server
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));

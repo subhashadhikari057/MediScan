@@ -14,15 +14,7 @@ import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import RoleRoute from "./components/RoleRoute";
-
-
-
-
-
-
-
-
-
+import Documentation from "./pages/Documentation";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -41,7 +33,10 @@ function App() {
 
   return (
     <Router>
+      {/* Scrolls to top on every route change */}
       <ScrollToTop />
+
+      {/* Toast Notifications */}
       <Toaster
         position="top-right"
         toastOptions={{
@@ -54,6 +49,7 @@ function App() {
         }}
       />
 
+      {/* Splash screen or Main Routes */}
       {showSplash ? (
         <MediScanSplash onComplete={handleSplashComplete} />
       ) : (
@@ -65,10 +61,19 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/doctors" element={<DoctorDiscovery />} />
           <Route path="/doctors/:id" element={<DoctorDetail />} />
-          
-          <Route path="/dashboard" element={<RoleRoute allowedRoles={["user"]} element={<UserDashboard />} />} />
-          <Route path="/admin-dashboard" element={<RoleRoute allowedRoles={["admin"]} element={<AdminDashboard />} />} />
-          <Route path="/doctor-dashboard" element={<RoleRoute allowedRoles={["doctor"]} element={<DoctorDashboard />} />} />
+          <Route
+            path="/dashboard"
+            element={<RoleRoute allowedRoles={["user"]} element={<UserDashboard />} />}
+          />
+          <Route
+            path="/admin-dashboard"
+            element={<RoleRoute allowedRoles={["admin"]} element={<AdminDashboard />} />}
+          />
+          <Route
+            path="/doctor-dashboard"
+            element={<RoleRoute allowedRoles={["doctor"]} element={<DoctorDashboard />} />}
+          />
+          <Route path="/documentation" element={<Documentation />} />
         </Routes>
       )}
     </Router>

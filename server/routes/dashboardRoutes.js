@@ -2,6 +2,7 @@ const express = require("express");
 const { userDashboard, doctorDashboard, adminDashboard } = require("../controllers/dashboardController");
 const { verifyToken, isUser, isDoctor, isAdmin } = require("../middlewares/authMiddleware");
 
+
 const router = express.Router();
 
 router.get("/user", verifyToken, isUser, userDashboard);
