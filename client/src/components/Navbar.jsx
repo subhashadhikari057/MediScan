@@ -133,7 +133,19 @@ const Navbar = () => {
                 <div className="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2 z-50">
                   <span className="block px-4 py-2 text-sm text-gray-600 dark:text-white font-medium">{user.name}</span>
                   <hr className="my-1 border-gray-200 dark:border-gray-700" />
-                  <Link to={user.role === "doctor" ? "/doctor-dashboard" : "/dashboard"} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Dashboard</Link>
+                  <Link
+  to={
+    user.role === "doctor"
+      ? "/doctor-dashboard"
+      : user.role === "admin"
+      ? "/admin-dashboard"
+      : "/dashboard"
+  }
+  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+>
+  Dashboard
+</Link>
+
                   <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">My Profile</Link>
                   <button onClick={logout} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700">Logout</button>
                 </div>
@@ -187,7 +199,20 @@ const Navbar = () => {
 
           {user ? (
             <>
-              <Link to={user.role === "doctor" ? "/doctor-dashboard" : "/dashboard"} onClick={() => setMobileMenuOpen(false)} className="block text-primary dark:text-cyan-400">Dashboard</Link>
+              <Link
+  to={
+    user.role === "doctor"
+      ? "/doctor-dashboard"
+      : user.role === "admin"
+      ? "/admin-dashboard"
+      : "/dashboard"
+  }
+  onClick={() => setMobileMenuOpen(false)}
+  className="block text-primary dark:text-cyan-400"
+>
+  Dashboard
+</Link>
+
               <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="block text-primary dark:text-cyan-400">My Profile</Link>
               <button onClick={logout} className="block text-left text-red-600">Logout</button>
             </>

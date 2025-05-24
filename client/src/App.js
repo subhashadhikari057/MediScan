@@ -10,6 +10,18 @@ import DoctorDiscovery from "./pages/DoctorDiscovery";
 import DoctorDetail from "./pages/DoctorDetail";
 import MediScanSplash from "./components/MediScanSplash";
 import { Toaster } from "react-hot-toast";
+import UserDashboard from "./pages/UserDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
+import DoctorDashboard from "./pages/DoctorDashboard";
+
+
+
+
+
+
+
+
+
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -52,6 +64,10 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/doctors" element={<DoctorDiscovery />} />
           <Route path="/doctors/:id" element={<DoctorDetail />} />
+          
+          <Route path="/dashboard" element={<UserDashboard />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
         </Routes>
       )}
     </Router>
