@@ -1,7 +1,7 @@
 const express = require("express");
 const { bookAppointment } = require("../controllers/appointmentController");
 const { getUserAppointments } = require("../controllers/appointmentController");
-const { getDoctorAppointments } = require("../controllers/appointmentController");
+const { getDoctorAppointments,getAllAppointments } = require("../controllers/appointmentController");
 
 
 
