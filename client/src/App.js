@@ -15,6 +15,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import RoleRoute from "./components/RoleRoute";
 import Documentation from "./pages/Documentation";
+import BookAppointment from "./pages/BookAppointment";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -74,6 +75,7 @@ function App() {
             element={<RoleRoute allowedRoles={["doctor"]} element={<DoctorDashboard />} />}
           />
           <Route path="/documentation" element={<Documentation />} />
+          <Route path="/book/:id" element={<BookAppointment />} />
         </Routes>
       )}
     </Router>

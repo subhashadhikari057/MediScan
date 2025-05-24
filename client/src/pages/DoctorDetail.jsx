@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { toast } from "react-hot-toast";
 
 const DoctorDetail = () => {
   const { id } = useParams();
@@ -30,6 +31,15 @@ const DoctorDetail = () => {
     };
     fetchDoctor();
   }, [id]);
+
+  const handleBooking = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please login to book an appointment.");
+      return;
+    }
+    navigate(`/book/${doctor._id}`);
+  };
 
   if (loading) {
     return (
@@ -68,7 +78,7 @@ const DoctorDetail = () => {
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white">{doctor.name}</h2>
           <p className="text-teal-600 font-medium mt-1">{doctor.specialization}</p>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">📍 {doctor.location}</p>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1"> License No: {doctor.licenseNumber || "Not Available"}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">License No: {doctor.licenseNumber || "Not Available"}</p>
 
           {/* Description */}
           <div className="mt-6 text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -92,7 +102,7 @@ const DoctorDetail = () => {
           {/* Book Appointment Button */}
           <div className="mt-10 text-center">
             <button
-              onClick={() => navigate(`/book/${doctor._id}`)}
+              onClick={handleBooking}
               className="bg-gradient-to-r from-teal-600 to-cyan-500 hover:from-teal-700 hover:to-cyan-600 text-white font-semibold py-3 px-6 rounded-full transition-all"
             >
               Book Appointment

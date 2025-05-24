@@ -1,20 +1,25 @@
 const express = require("express");
-const { bookAppointment } = require("../controllers/appointmentController");
-const { getUserAppointments } = require("../controllers/appointmentController");
-const { getDoctorAppointments,getAllAppointments } = require("../controllers/appointmentController");
+const {
+  bookAppointment,
+  getUserAppointments,
+  getDoctorAppointments,
+  getAllAppointments,
+  updateAppointmentStatus,
+} = require("../controllers/appointmentController");
 
-
-
-
+const { verifyToken, isUser, isDoctor, isAdmin } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-router.post("/book", bookAppointment);
-router.get("/user", getUserAppointments);
-router.get("/doctor", getDoctorAppointments);
-router.get("/admin", getAllAppointments);
+// Book appointment (user only)
+router.post("/book", verifyToken, isUser, bookAppointment);
 
+// View own appointments
+router.get("/user", verifyToken, isUser, getUserAppointments);
+router.get("/doctor", verifyToken, isDoctor, getDoctorAppointments);
+router.get("/admin", verifyToken, isAdmin, getAllAppointments);
 
-
+// Update appointment status (doctor only)
+router.patch("/:id/status", verifyToken, isDoctor, updateAppointmentStatus);
 
 module.exports = router;

@@ -37,5 +37,8 @@ app.use("/api/appointments", appointmentRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/admin", adminRoutes);
 
+
+
+
 // Start Server
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
