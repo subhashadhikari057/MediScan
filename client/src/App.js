@@ -16,6 +16,7 @@ import DoctorDashboard from "./pages/DoctorDashboard";
 import RoleRoute from "./components/RoleRoute";
 import Documentation from "./pages/Documentation";
 import BookAppointment from "./pages/BookAppointment";
+import AdminCleanupLogs from "./pages/AdminCleanupLogs";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -76,6 +77,8 @@ function App() {
           />
           <Route path="/documentation" element={<Documentation />} />
           <Route path="/book/:id" element={<BookAppointment />} />
+          <Route
+            path="/admin/cleanup-logs"element={<RoleRoute allowedRoles={["admin"]} element={<AdminCleanupLogs />} />}/>
         </Routes>
       )}
     </Router>

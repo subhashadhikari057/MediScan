@@ -95,6 +95,15 @@ const AdminDashboard = () => {
       iconColor: "text-orange-600 dark:text-orange-400",
       route: "/admin/manage-appointments",
     },
+    {
+      title: "Cleanup Logs",
+      description: "View deleted cancelled appointments after 24 hours",
+      icon: Clock,
+      bg: "bg-rose-50 border border-rose-200 hover:bg-rose-100 dark:bg-rose-950 dark:border-rose-700 dark:hover:bg-rose-900",
+      iconColor: "text-rose-600 dark:text-rose-400",
+      route: "/admin/cleanup-logs",
+}
+
   ];
 
   return (

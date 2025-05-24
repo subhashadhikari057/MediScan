@@ -1,22 +1,33 @@
-// scheduler.js
-const cron = require("node-cron");
 const Appointment = require("./models/Appointment");
+const User = require("./models/User");
+const CleanupLog = require("./models/CleanupLog");
 
-// Run this task every hour
-cron.schedule("0 * * * *", async () => {
-  const now = new Date();
-  const cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 hours ago
+const deleteCancelledAppointments = async () => {
+  const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
-  try {
-    const result = await Appointment.deleteMany({
-      status: "cancelled",
-      updatedAt: { $lt: cutoff },
+  const oldCancelled = await Appointment.find({
+    status: "cancelled",
+    updatedAt: { $lte: cutoff },
+  }).populate("doctorId", "name")
+    .populate("userId", "name");
+
+  if (oldCancelled.length > 0) {
+    const deletedDetails = oldCancelled.map(appt => ({
+      appointmentId: appt._id,
+      doctorName: appt.doctorId?.name,
+      userName: appt.userId?.name,
+      date: appt.date,
+      time: appt.time,
+      reason: appt.cancellationReason || "No reason provided"
+    }));
+
+    await Appointment.deleteMany({ _id: { $in: oldCancelled.map(a => a._id) } });
+
+    await CleanupLog.create({
+      deletedAppointments: deletedDetails,
+      deletedCount: deletedDetails.length,
     });
 
-    if (result.deletedCount > 0) {
-      console.log(`🗑️ Deleted ${result.deletedCount} cancelled appointments older than 24 hrs`);
-    }
-  } catch (err) {
-    console.error("❌ Scheduler error:", err.message);
+    console.log(`[Scheduler] Deleted ${deletedDetails.length} cancelled appointments and logged them.`);
   }
-});
+};
