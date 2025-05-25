@@ -27,42 +27,42 @@ const CompleteProfile = () => {
     }
   }, [navigate]);
 
+  // ✅ Fix: define handleChange to update formData
   const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const payload = {
-      email: user.email,
-      password: formData.password,
-      role,
-      specialization: role === "doctor" ? formData.specialization : "",
-      licenseNumber: role === "doctor" ? formData.licenseNumber : "",
-      location,
-    };
+    e.preventDefault();
+    try {
+      const payload = {
+        email: user.email,
+        password: formData.password,
+        role,
+        specialization: role === "doctor" ? formData.specialization : "",
+        licenseNumber: role === "doctor" ? formData.licenseNumber : "",
+        location,
+      };
 
-    const res = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/auth/complete-profile`,
-      payload
-    );
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/auth/complete-profile`,
+        payload
+      );
 
-    const { token, user: updatedUser } = res.data;
+      const { token, user: updatedUser } = res.data;
 
-    // Store updated user & token
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(updatedUser));
-    localStorage.removeItem("googleUser");
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      localStorage.removeItem("googleUser");
 
-    toast.success("🎉 Profile completed and you're now logged in!");
-    navigate("/");
-  } catch (err) {
-    console.error(err);
-    toast.error(err.response?.data?.message || "Failed to complete profile");
-  }
-};
-
+      toast.success("🎉 Profile completed and you're now logged in!");
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || "Failed to complete profile");
+    }
+  };
 
   return (
     <>
@@ -73,12 +73,24 @@ const CompleteProfile = () => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label className="block mb-1 text-sm text-gray-600 dark:text-gray-300">Name</label>
-              <input type="text" value={user.name} readOnly disabled className="w-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 text-gray-700 dark:text-white" />
+              <input
+                type="text"
+                value={user.name}
+                readOnly
+                disabled
+                className="w-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 text-gray-700 dark:text-white"
+              />
             </div>
 
             <div>
               <label className="block mb-1 text-sm text-gray-600 dark:text-gray-300">Email</label>
-              <input type="email" value={user.email} readOnly disabled className="w-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 text-gray-700 dark:text-white" />
+              <input
+                type="email"
+                value={user.email}
+                readOnly
+                disabled
+                className="w-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 text-gray-700 dark:text-white"
+              />
             </div>
 
             <div>

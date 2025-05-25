@@ -70,9 +70,18 @@ const DoctorDetail = () => {
 
         <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700 text-center">
           {/* Avatar */}
-          <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-teal-600 text-white flex items-center justify-center text-2xl font-bold">
-            {getInitials(doctor.name)}
-          </div>
+          {doctor.photoURL ? (
+  <img
+    src={doctor.photoURL}
+    alt={doctor.name}
+    className="w-20 h-20 mx-auto mb-4 rounded-full object-cover border-2 border-teal-600 shadow"
+  />
+) : (
+  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-teal-600 text-white flex items-center justify-center text-2xl font-bold">
+    {getInitials(doctor.name)}
+  </div>
+)}
+
 
           {/* Basic Info */}
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white">{doctor.name}</h2>

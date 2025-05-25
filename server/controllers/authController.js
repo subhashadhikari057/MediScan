@@ -72,7 +72,7 @@ exports.googleSignup = async (req, res) => {
         email,
         password: "", // No password for Google auth
         role: "user",
-        photoURL,
+        photoURL:"",
         // You can optionally store photoURL if your model supports it
       });
 

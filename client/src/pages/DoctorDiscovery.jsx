@@ -62,10 +62,10 @@ const DoctorDiscovery = () => {
   useEffect(() => {
     const tipTimer = setInterval(() => {
       setTipIndex((prev) => (prev + 1) % tips.length);
-    }, 600000); // 10 minutes
+    }, 600000);
     const reviewTimer = setInterval(() => {
       setReviewIndex((prev) => (prev + 1) % reviews.length);
-    }, 600000); // 10 minutes
+    }, 600000);
     return () => {
       clearInterval(tipTimer);
       clearInterval(reviewTimer);
@@ -81,7 +81,6 @@ const DoctorDiscovery = () => {
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <Navbar />
       <div className="mt-16 max-w-7xl mx-auto px-4 py-8">
-        {/* Mobile Filter Dropdown */}
         <div className="md:hidden mb-6">
           <select
             value={selectedSpecialization}
@@ -104,7 +103,6 @@ const DoctorDiscovery = () => {
         </div>
 
         <div className="flex flex-col md:flex-row">
-          {/* Desktop Sidebar */}
           <aside className="hidden md:block w-full md:w-1/4 mb-8 md:mb-0 md:mr-24">
             <div className="sticky top-24 space-y-6">
               <input
@@ -114,7 +112,6 @@ const DoctorDiscovery = () => {
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
               />
-
               <div>
                 <h3 className="font-bold mb-2 text-gray-700 dark:text-white">Categories</h3>
                 <ul className="space-y-1">
@@ -140,19 +137,15 @@ const DoctorDiscovery = () => {
                 </button>
               </div>
 
-              {/* Tip */}
               <div className="border rounded-lg p-4 text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800">
                 {tips[tipIndex]}
               </div>
-
-              {/* Review */}
               <div className="border rounded-lg p-4 text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800">
                 {reviews[reviewIndex]}
               </div>
             </div>
           </aside>
 
-          {/* Doctor Grid */}
           <main className="flex-1">
             <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
               Available Doctors
@@ -163,9 +156,17 @@ const DoctorDiscovery = () => {
                   key={doc._id}
                   className="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-lg transition flex flex-col items-center text-center"
                 >
-                  <div className="w-16 h-16 rounded-full bg-teal-600 text-white flex items-center justify-center text-xl font-bold mb-4">
-                    {getInitials(doc.name)}
-                  </div>
+                  {doc.photoURL ? (
+                    <img
+                      src={doc.photoURL}
+                      alt={doc.name}
+                      className="w-16 h-16 rounded-full object-cover mb-4 shadow"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 rounded-full bg-teal-600 text-white flex items-center justify-center text-xl font-bold mb-4">
+                      {getInitials(doc.name)}
+                    </div>
+                  )}
                   <h3 className="font-bold text-lg text-gray-800 dark:text-white mb-1">
                     {doc.name}
                   </h3>
