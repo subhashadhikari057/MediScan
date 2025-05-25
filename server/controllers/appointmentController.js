@@ -1,6 +1,7 @@
 const Appointment = require("../models/Appointment");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const AppointmentLog = require("../models/AppointmentLog");
 
 // Book Appointment (USER)
 exports.bookAppointment = async (req, res) => {
@@ -89,3 +90,69 @@ exports.updateAppointmentStatus = async (req, res) => {
     res.status(500).json({ message: "Failed to update status", error: err });
   }
 };
+
+exports.updateAppointmentStatus = async (req, res) => {
+  try {
+    const { status, cancellationReason, date, time } = req.body;
+
+    const validStatuses = ["pending", "approved", "completed", "cancelled"];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid status value" });
+    }
+
+    if (status === "cancelled" && !cancellationReason?.trim()) {
+      return res.status(400).json({ message: "Cancellation reason is required" });
+    }
+
+    const appointment = await Appointment.findById(req.params.id);
+    if (!appointment) return res.status(404).json({ message: "Appointment not found" });
+
+    const logs = [];
+
+    if (appointment.status !== status) {
+      logs.push({
+        action: "Status Change",
+        from: appointment.status,
+        to: status,
+        note: status === "cancelled" ? `Reason: ${cancellationReason}` : "",
+      });
+      appointment.status = status;
+      appointment.cancellationReason = status === "cancelled" ? cancellationReason : "";
+    }
+
+    if (date && date !== appointment.date) {
+      logs.push({
+        action: "Date Rescheduled",
+        from: appointment.date,
+        to: date,
+      });
+      appointment.date = date;
+    }
+
+    if (time && time !== appointment.time) {
+      logs.push({
+        action: "Time Rescheduled",
+        from: appointment.time,
+        to: time,
+      });
+      appointment.time = time;
+    }
+
+    await appointment.save();
+
+    // Save logs
+    for (let log of logs) {
+      await AppointmentLog.create({
+        appointmentId: appointment._id,
+        changedBy: req.user._id,
+        ...log,
+      });
+    }
+
+    res.status(200).json({ message: "Appointment updated", appointment });
+  } catch (err) {
+    console.error("Status update failed:", err);
+    res.status(500).json({ message: "Failed to update status", error: err });
+  }
+};
+

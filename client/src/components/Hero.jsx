@@ -68,7 +68,7 @@ const Hero = () => {
           variants={fadeInUp}
           className="inline-block mb-5 px-4 py-1.5 bg-teal-50 border border-teal-200 text-teal-700 text-sm font-medium rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-teal-300"
         >
-          🧠 AI-Powered Healthcare
+          ⛑️ AI-Powered Healthcare
         </motion.div>
 
         <motion.h1

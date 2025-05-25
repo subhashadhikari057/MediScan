@@ -8,6 +8,8 @@ import Testimonials from "../components/Testimonials";
 import FinalCTA from "../components/FinalCTA";
 import Footer from "../components/Footer";
 import ScrollToTop from "../components/ScrollToTop";
+import WhyChooseUs from "../components/WhyChooseUs";
+
 
 
 const Home = () => {
@@ -17,6 +19,7 @@ const Home = () => {
       <Navbar />
        <Hero />
        <Stats/>
+       <WhyChooseUs/>
        <HowItWorks />
        <Features/>
        <Testimonials/>

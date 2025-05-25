@@ -22,6 +22,7 @@ const ManageAppointments = () => {
   const [editForm, setEditForm] = useState({ date: "", time: "", status: "", reason: "" });
   const [logs, setLogs] = useState([]);
   const [logModalOpen, setLogModalOpen] = useState(false);
+  const [confirmDeleteAppt, setConfirmDeleteAppt] = useState(null); // NEW STATE
 
   const fetchAppointments = async () => {
     try {
@@ -92,16 +93,14 @@ const ManageAppointments = () => {
     }
   };
 
-  const handleDeleteAppointment = async (id) => {
-    const confirm = window.confirm("Are you sure you want to delete this appointment?");
-    if (!confirm) return;
-
+  const handleDeleteAppointment = async () => {
     const token = localStorage.getItem("token");
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/api/admin/appointments/${id}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/admin/appointments/${confirmDeleteAppt._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Appointment deleted");
+      setConfirmDeleteAppt(null);
       fetchAppointments();
     } catch {
       toast.error("Failed to delete appointment");
@@ -197,7 +196,7 @@ const ManageAppointments = () => {
                     <Pencil className="w-5 h-5" />
                   </button>
                   <button
-                    onClick={() => handleDeleteAppointment(appt._id)}
+                    onClick={() => setConfirmDeleteAppt(appt)}
                     className="text-red-600 dark:text-red-400"
                   >
                     <Trash className="w-5 h-5" />
@@ -322,6 +321,36 @@ const ManageAppointments = () => {
                   className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md"
                 >
                   Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Delete Confirmation Modal */}
+        {confirmDeleteAppt && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg w-full max-w-sm">
+              <h2 className="text-lg font-semibold mb-4 text-red-600 dark:text-red-400">
+                Confirm Deletion
+              </h2>
+              <p className="mb-6">
+                Are you sure you want to delete the appointment between{" "}
+                <strong>{confirmDeleteAppt.userId.name}</strong> and{" "}
+                <strong>{confirmDeleteAppt.doctorId.name}</strong>?
+              </p>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setConfirmDeleteAppt(null)}
+                  className="px-4 py-2 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteAppointment}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md"
+                >
+                  Delete
                 </button>
               </div>
             </div>

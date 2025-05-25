@@ -4,6 +4,8 @@ import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { CalendarDays, Clock, FileText } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
+import SecureInfoBanner from "../components/SecureInfoBanner";
 
 const BookAppointment = () => {
   const { id } = useParams();
@@ -16,7 +18,6 @@ const BookAppointment = () => {
   const [period, setPeriod] = useState("AM");
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   useEffect(() => {
@@ -24,8 +25,8 @@ const BookAppointment = () => {
       try {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/doctors/${id}`);
         setDoctor(res.data);
-      } catch (err) {
-        setError("Failed to load doctor details.");
+      } catch {
+        toast.error("Failed to load doctor details.");
       }
     };
     fetchDoctor();
@@ -41,29 +42,35 @@ const BookAppointment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
     setSuccess("");
 
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("You must be logged in to book an appointment.");
+      setLoading(false);
+      return;
+    }
+
+    if (!reason.trim()) {
+      toast.error("Please provide a valid reason for the appointment.");
+      setLoading(false);
+      return;
+    }
+
+    const time = formatTimeTo24Hour();
+
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("You must be logged in to book an appointment.");
-        return;
-      }
-
-      const time = formatTimeTo24Hour();
-
-      const res = await axios.post(
+      await axios.post(
         `${process.env.REACT_APP_API_URL}/api/appointments/book`,
         { doctorId: id, date, time, reason },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
+      toast.success("Appointment booked successfully!");
       setSuccess("Appointment booked successfully!");
-      setTimeout(() => navigate("/dashboard"), 1500);
+      setTimeout(() => navigate("/dashboard"), 2000);
     } catch (err) {
       console.error(err);
-      setError("Failed to book appointment. Try again.");
+      toast.error("Failed to book appointment. Try again.");
     } finally {
       setLoading(false);
     }
@@ -79,16 +86,25 @@ const BookAppointment = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white">
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+          animation: fadeIn 0.4s ease-out;
+        }
+      `}</style>
+
+      <Toaster position="top-right" />
       <Navbar />
       <main className="max-w-3xl mx-auto px-4 py-20">
+        <SecureInfoBanner />
         <h1 className="text-3xl font-bold mb-6 text-primary">
           Book Appointment with {doctor.name}
         </h1>
 
         <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md space-y-6">
-          {error && <p className="text-red-500">{error}</p>}
-          {success && <p className="text-green-500">{success}</p>}
-
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Date */}
             <div>
@@ -105,7 +121,7 @@ const BookAppointment = () => {
               </div>
             </div>
 
-            {/* Time (AM/PM format) */}
+            {/* Time */}
             <div>
               <label className="block mb-2 font-medium">Time</label>
               <div className="flex items-center gap-2">
@@ -151,6 +167,7 @@ const BookAppointment = () => {
                   onChange={(e) => setReason(e.target.value)}
                   placeholder="Describe your symptoms or reason for visit..."
                   rows={4}
+                  
                   className="w-full px-4 py-2 pr-10 rounded-lg bg-gray-100 dark:bg-gray-700 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary"
                 />
                 <FileText className="absolute top-3 right-3 text-gray-400 pointer-events-none" />
@@ -165,6 +182,12 @@ const BookAppointment = () => {
               {loading ? "Booking..." : "Confirm Appointment"}
             </button>
           </form>
+
+          {success && (
+            <div className="fade-in text-green-600 font-semibold text-center mt-4">
+              {success}
+            </div>
+          )}
         </div>
       </main>
       <Footer />
