@@ -50,7 +50,7 @@ const ManageUsers = () => {
   const saveEdit = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.patch(`${process.env.REACT_APP_API_URL}/api/users/${editUser._id}`, editForm, {
+      await axios.patch(`${process.env.REACT_APP_API_URL}/api/admin/users/${editUser._id}`, editForm, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("User updated");

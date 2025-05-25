@@ -6,7 +6,7 @@ exports.registerUser = async (req, res) => {
     
   try {
     
-    const { name, email, password, role, specialization, licenseNumber } = req.body;
+    const { name, email, password, role, photoURL, specialization, licenseNumber } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: "Email already in use" });
@@ -18,6 +18,7 @@ exports.registerUser = async (req, res) => {
       email,
       password: hashedPassword,
       role,
+      photoURL: photoURL || "", // Optional
       specialization: role === "doctor" ? specialization : undefined,
       licenseNumber: role === "doctor" ? licenseNumber : undefined
     });
@@ -167,44 +168,42 @@ exports.getUserProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
-    const { name, location, password, specialization } = req.body; // ✅ include specialization
-
     if (!token) return res.status(401).json({ message: "Unauthorized" });
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
+    const { name, email, photoURL, mobile, location } = req.body;
+
     if (name) user.name = name;
-    if (location) user.location = location;
-    if (specialization && user.role === "doctor") {
-      user.specialization = specialization; // ✅ update specialization
-    }
-    if (password) {
-      user.password = await bcrypt.hash(password, 10);
-    }
+    if (email) user.email = email;
+    if (photoURL) user.photoURL = photoURL;
+    if (mobile !== undefined) user.mobile = mobile;
+    if (location !== undefined) user.location = location;
 
     await user.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Profile updated successfully",
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role,
-        location: user.location,
-        specialization: user.specialization,
-        licenseNumber: user.licenseNumber,
         photoURL: user.photoURL,
+        mobile: user.mobile || "",
+        role: user.role,
+        location: user.location || "",
       },
     });
-
   } catch (err) {
     console.error("Update profile error:", err);
-    res.status(500).json({ message: "Server error", error: err });
+    return res.status(500).json({ message: "Server error", error: err });
   }
 };
+
+
+
 
 exports.changePassword = async (req, res) => {
   try {
