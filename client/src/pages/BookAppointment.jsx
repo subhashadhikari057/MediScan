@@ -19,6 +19,10 @@ const BookAppointment = () => {
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
+  const [allergies, setAllergies] = useState("");
+const [medications, setMedications] = useState("");
+const [conditions, setConditions] = useState("");
+
 
   useEffect(() => {
     const fetchDoctor = async () => {
@@ -62,7 +66,7 @@ const BookAppointment = () => {
     try {
       await axios.post(
         `${process.env.REACT_APP_API_URL}/api/appointments/book`,
-        { doctorId: id, date, time, reason },
+        { doctorId: id, date, time, reason,allergies,medications,conditions, },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       toast.success("Appointment booked successfully!");
@@ -157,6 +161,42 @@ const BookAppointment = () => {
                 <Clock className="text-gray-400" />
               </div>
             </div>
+            {/* Allergies */}
+<div>
+  <label className="block mb-2 font-medium">Allergies (optional)</label>
+  <textarea
+    value={allergies}
+    onChange={(e) => setAllergies(e.target.value)}
+    placeholder="List any allergies..."
+    rows={2}
+    className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 border dark:border-gray-600"
+  />
+</div>
+
+{/* Medications */}
+<div>
+  <label className="block mb-2 font-medium">Current Medications (optional)</label>
+  <textarea
+    value={medications}
+    onChange={(e) => setMedications(e.target.value)}
+    placeholder="List any current medications..."
+    rows={2}
+    className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 border dark:border-gray-600"
+  />
+</div>
+
+{/* Conditions */}
+<div>
+  <label className="block mb-2 font-medium">Medical Conditions (optional)</label>
+  <textarea
+    value={conditions}
+    onChange={(e) => setConditions(e.target.value)}
+    placeholder="Mention any existing conditions..."
+    rows={2}
+    className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 border dark:border-gray-600"
+  />
+</div>
+
 
             {/* Reason */}
             <div>

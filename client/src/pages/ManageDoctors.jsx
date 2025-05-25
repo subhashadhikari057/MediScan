@@ -132,7 +132,25 @@ const ManageDoctors = () => {
                   key={d._id}
                   className={index % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-800"}
                 >
-                  <td className="px-6 py-4 font-medium">{d.name}</td>
+                  <td className="px-6 py-4 font-medium">
+  <div className="flex items-center gap-3">
+    <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden text-white text-lg font-bold">
+      {d.photoURL ? (
+        <img
+          src={d.photoURL}
+          alt={d.name}
+          className="w-full h-full object-cover"
+        />
+      ) : (
+        <span className="text-teal-600 dark:text-teal-300">
+          {d.name?.charAt(0).toUpperCase()}
+        </span>
+      )}
+    </div>
+    <span>{d.name}</span>
+  </div>
+</td>
+
                   <td className="px-6 py-4">{d.email}</td>
                   <td className="px-6 py-4">{d.location || "N/A"}</td>
                   <td className="px-6 py-4">{d.specialization}</td>

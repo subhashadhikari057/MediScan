@@ -10,7 +10,7 @@ const ManageUsers = () => {
   const [search, setSearch] = useState("");
   const [editUser, setEditUser] = useState(null);
   const [editForm, setEditForm] = useState({ name: "", location: "" });
-  const [confirmDeleteUser, setConfirmDeleteUser] = useState(null); // NEW STATE
+  const [confirmDeleteUser, setConfirmDeleteUser] = useState(null);
 
   const fetchUsers = async () => {
     try {
@@ -74,10 +74,10 @@ const ManageUsers = () => {
   };
 
   const filteredUsers = users.filter(u =>
-  u.name.toLowerCase().includes(search.toLowerCase()) ||
-  u.email.toLowerCase().includes(search.toLowerCase()) ||
-  (u.location && u.location.toLowerCase().includes(search.toLowerCase()))
-);
+    u.name.toLowerCase().includes(search.toLowerCase()) ||
+    u.email.toLowerCase().includes(search.toLowerCase()) ||
+    (u.location && u.location.toLowerCase().includes(search.toLowerCase()))
+  );
 
   useEffect(() => {
     fetchUsers();
@@ -113,7 +113,7 @@ const ManageUsers = () => {
           <table className="w-full text-sm text-left border dark:border-gray-700 text-gray-700 dark:text-gray-200">
             <thead className="text-xs uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
               <tr>
-                <th className="px-6 py-3">Name</th>
+                <th className="px-6 py-3">User</th>
                 <th className="px-6 py-3">Email</th>
                 <th className="px-6 py-3">Location</th>
                 <th className="px-6 py-3">Actions</th>
@@ -122,7 +122,24 @@ const ManageUsers = () => {
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredUsers.map((user) => (
                 <tr key={user._id} className="bg-gray-50 dark:bg-gray-800">
-                  <td className="px-6 py-4 font-medium">{user.name}</td>
+                  <td className="px-6 py-4 font-medium">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden text-white text-lg font-bold">
+                        {user.photoURL ? (
+                          <img
+                            src={user.photoURL}
+                            alt={user.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-teal-600 dark:text-teal-300">
+                            {user.name.charAt(0).toUpperCase()}
+                          </span>
+                        )}
+                      </div>
+                      <span>{user.name}</span>
+                    </div>
+                  </td>
                   <td className="px-6 py-4">{user.email}</td>
                   <td className="px-6 py-4">{user.location || "N/A"}</td>
                   <td className="px-6 py-4 flex items-center gap-4">

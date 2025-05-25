@@ -6,7 +6,8 @@ const AppointmentLog = require("../models/AppointmentLog");
 // Book Appointment (USER)
 exports.bookAppointment = async (req, res) => {
   try {
-    const { doctorId, date, time, reason } = req.body;
+    const { doctorId, date, time, reason, allergies, medications, conditions } = req.body;
+
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) return res.status(401).json({ message: "Unauthorized" });
 
@@ -18,6 +19,9 @@ exports.bookAppointment = async (req, res) => {
       date,
       time,
       reason,
+      allergies,       // ✅ now defined
+      medications,     // ✅ now defined
+      conditions,      // ✅ now defined
     });
 
     await appointment.save();
@@ -27,6 +31,7 @@ exports.bookAppointment = async (req, res) => {
     res.status(500).json({ message: "Failed to book appointment", error: err });
   }
 };
+
 
 // Get User Appointments
 exports.getUserAppointments = async (req, res) => {

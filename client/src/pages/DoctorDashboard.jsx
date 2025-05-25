@@ -135,6 +135,15 @@ const DoctorDashboard = () => {
 
                 <p className="text-sm text-gray-600 dark:text-gray-300">Reason: {appt.reason}</p>
 
+                {/* ✅ Medical Info */}
+                {(appt.allergies || appt.medications || appt.conditions) && (
+                  <div className="mt-2 text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                    {appt.allergies && <p>Allergies: {appt.allergies}</p>}
+                    {appt.medications && <p>Medications: {appt.medications}</p>}
+                    {appt.conditions && <p>Conditions: {appt.conditions}</p>}
+                  </div>
+                )}
+
                 <span
                   className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium ${
                     appt.status === "pending"

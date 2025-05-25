@@ -33,6 +33,20 @@ const appointmentSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+
+    // ✅ New optional fields properly defined:
+    allergies: {
+      type: String,
+      default: "",
+    },
+    medications: {
+      type: String,
+      default: "",
+    },
+    conditions: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );
