@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "components/Navbar";
 import Footer from "components/Footer";
-import { Pencil } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import CompleteProfilePrompt from "../components/CompleteProfilePrompt";
 
 
 
@@ -23,6 +23,7 @@ const Profile = () => {
     name: "",
     photoURL: "",
     mobile: "",
+    location: "",
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -43,6 +44,7 @@ const Profile = () => {
           name: data.name || "",
           photoURL: data.photoURL || "",
           mobile: data.mobile || "",
+          location: data.location || "", 
         });
         localStorage.setItem("user", JSON.stringify(data));
       } catch (err) {
@@ -53,31 +55,49 @@ const Profile = () => {
     fetchProfile();
   }, []);
 
-  const handleChange = (e) => {
+    const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
-  const handleEditSubmit = async (e = null) => {
-    e.preventDefault();
-    try {
-      const token = localStorage.getItem("token");
-      const payload = {
-        name: formData.name,
-        photoURL: formData.photoURL,
-        mobile: formData.mobile,
-      };
-      const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/update-profile`, payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      toast.success("✅ Profile updated!");
-      setEditMode(false);
-      setUser(data.user);
-      localStorage.setItem("user", JSON.stringify(data.user));
-    } catch (err) {
-      toast.error("Update failed.");
-      console.error(err);
-    }
-  };
+  const handleEditSubmit = async (e) => {
+  if (e) e.preventDefault();
+
+  // Prevent fields that were previously filled from being cleared
+  const uneditableEmptyFields = [];
+  if (user.name && formData.name.trim() === "") uneditableEmptyFields.push("Name");
+  if (user.photoURL && formData.photoURL.trim() === "") uneditableEmptyFields.push("Profile Image URL");
+  if (user.mobile && formData.mobile.trim() === "") uneditableEmptyFields.push("Mobile Number");
+  if (user.location && formData.location.trim() === "") uneditableEmptyFields.push("Location");
+
+  if (uneditableEmptyFields.length > 0) {
+    toast.error(`You cannot empty: ${uneditableEmptyFields.join(", ")}`);
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("token");
+    const payload = {
+      name: formData.name,
+      photoURL: formData.photoURL,
+      mobile: formData.mobile,
+      location: formData.location,
+    };
+
+    const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/update-profile`, payload, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    toast.success("✅ Profile updated!");
+    setEditMode(false);
+    setUser(data.user);
+    localStorage.setItem("user", JSON.stringify(data.user));
+  } catch (err) {
+    toast.error("Update failed.");
+    console.error(err);
+  }
+};
+
+
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
@@ -112,6 +132,7 @@ const Profile = () => {
   return (
     <>
       <Navbar />
+      <CompleteProfilePrompt />
       <section className="min-h-screen bg-white dark:bg-gray-900 px-4 py-16 flex justify-center items-center">
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full max-w-xl p-6 space-y-6">
           <div className="flex flex-col items-center text-center">
@@ -165,7 +186,6 @@ const Profile = () => {
   e.preventDefault();
   setShowConfirmModal(true);
 }}>
-
               <div>
                 <label htmlFor="name" className="block text-sm text-gray-600 dark:text-gray-300">Full Name</label>
                 <input
@@ -178,15 +198,29 @@ const Profile = () => {
               </div>
 
               <div>
-                <label htmlFor="mobile" className="block text-sm text-gray-600 dark:text-gray-300">Mobile Number</label>
-                <input
-                  type="text"
-                  id="mobile"
-                  value={formData.mobile}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-800 dark:text-white"
-                />
-              </div>
+  <label htmlFor="mobile" className="block text-sm text-gray-600 dark:text-gray-300">Mobile Number</label>
+  <input
+    type="tel"
+    id="mobile"
+    value={formData.mobile}
+    onChange={(e) => {
+      const val = e.target.value.replace(/\D/g, "").slice(0, 10); // only digits, max 10
+      setFormData((prev) => ({ ...prev, mobile: val }));
+    }}
+    className="w-full px-4 py-2 border rounded-lg dark:bg-gray-800 dark:text-white"
+    placeholder="Enter 10-digit mobile number"
+  />
+</div>
+              <div>
+              <label htmlFor="location" className="block text-sm text-gray-600 dark:text-gray-300">Location</label>
+              <input
+                type="text"
+                id="location"
+                value={formData.location}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-800 dark:text-white"
+              />
+            </div>            
 
               <div>
                 <label htmlFor="photoURL" className="block text-sm text-gray-600 dark:text-gray-300">Profile Image URL</label>

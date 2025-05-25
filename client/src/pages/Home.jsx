@@ -9,6 +9,10 @@ import FinalCTA from "../components/FinalCTA";
 import Footer from "../components/Footer";
 import ScrollToTop from "../components/ScrollToTop";
 import WhyChooseUs from "../components/WhyChooseUs";
+import CompleteProfilePrompt from "../components/CompleteProfilePrompt";
+
+
+
 
 
 
@@ -16,6 +20,7 @@ const Home = () => {
   return (
     <div>
       <ScrollToTop />
+       <CompleteProfilePrompt />
       <Navbar />
        <Hero />
        <Stats/>
