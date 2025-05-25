@@ -93,11 +93,11 @@ const Hero = () => {
           variants={fadeInUp}
           className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-10"
         >
-          <Button onClick={() => scrollTo("symptom-checker")}>
-            <Brain className="h-5 w-5" />
-            Smart Symptom Checker
-            <ChevronRight className="h-4 w-4" />
-          </Button>
+          <Button onClick={() => navigate("/symptom-checker")}>
+  <Brain className="h-5 w-5" />
+  Smart Symptom Checker
+  <ChevronRight className="h-4 w-4" />
+</Button>
 
           <Button variant="outline" onClick={() => scrollTo("skin-detector")}>
             <Camera className="h-5 w-5" />

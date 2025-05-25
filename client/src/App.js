@@ -20,6 +20,8 @@ import AdminCleanupLogs from "./pages/AdminCleanupLogs";
 import ManageUsers from "./pages/ManageUsers";
 import ManageDoctors from "./pages/ManageDoctors";
 import ManageAppointments from "./pages/ManageAppointments";
+import SymptomChecker from "./pages/SymptomChecker"; // Adjust path if needed
+
 
 
 function App() {
@@ -86,6 +88,7 @@ function App() {
           <Route path="/book/:id" element={<BookAppointment />} />
           <Route
             path="/admin/cleanup-logs"element={<RoleRoute allowedRoles={["admin"]} element={<AdminCleanupLogs />} />}/>
+            <Route path="/symptom-checker" element={<SymptomChecker />} />
         </Routes>
       )}
     </Router>
