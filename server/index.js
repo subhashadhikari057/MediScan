@@ -10,6 +10,7 @@ const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/adminRoutes");
 const symptomRoutes = require("./routes/symptomRoutes");
 
+
 dotenv.config();
 
 const app = express();
@@ -36,6 +37,7 @@ app.use("/api/appointments", appointmentRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/symptom", symptomRoutes);
+
 
 // ✅ Cron job to auto-delete cancelled appointments
 require("./scheduler");
