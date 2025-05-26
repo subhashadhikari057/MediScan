@@ -5,6 +5,8 @@ import Footer from "../components/Footer";
 import InfoModal from "../components/InfoModal";
 import SecureChatBox from "../components/SecureChatBox";
 import VitaminOfTheDayBox from "components/VitaminOfTheDayBox";
+import axios from "axios";
+
 
 const symptoms = [
   "Fever", "Cough", "Headache", "Sore throat", "Runny nose", "Body aches",
@@ -122,23 +124,23 @@ const diagnosisText = diagnosisTextLine
   const adviceText = diagnosisResult.split("\n").find(line => line.startsWith("4.") || line.startsWith("5.")) || "Not available";
 
   const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch("http://localhost:8080/api/symptom/check", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      setDiagnosisResult(data.diagnosis || "No diagnosis returned.");
-      setShowModal(true);
-    } catch (err) {
-      setDiagnosisResult("⚠️ Something went wrong. Please try again.");
-      setShowModal(true);
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/symptom/check`,
+      formData
+    );
+    const data = res.data;
+    setDiagnosisResult(data.diagnosis || "No diagnosis returned.");
+    setShowModal(true);
+  } catch (err) {
+    setDiagnosisResult("⚠️ Something went wrong. Please try again.");
+    setShowModal(true);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 dark:from-slate-900 dark:via-gray-950 dark:to-slate-900 text-gray-900 dark:text-white transition-colors">
