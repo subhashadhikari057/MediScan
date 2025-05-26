@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Smile, RefreshCw } from "lucide-react";
+import { Smile, RefreshCw, Sparkles } from "lucide-react";
 
 const funnyTips = [
   "Not every headache means brain tumor. Breathe 😌",
@@ -30,26 +30,38 @@ const InfoModal = () => {
   };
 
   return (
-    <div className="hidden sm:flex w-64 h-64 bg-white dark:bg-slate-900 border border-cyan-200 dark:border-cyan-700 rounded-2xl p-4 shadow-md flex-col items-center justify-between text-center">
-      {/* Top Icon */}
-      <div className="bg-yellow-400 dark:bg-yellow-300 p-3 rounded-full shadow-sm">
-        <Smile className="w-6 h-6 text-white dark:text-yellow-900" />
+    <div className="w-full max-w-3xl bg-gradient-to-br from-yellow-50 to-amber-50 dark:from-yellow-950/40 dark:to-amber-950/30 border border-yellow-200 dark:border-yellow-800 rounded-2xl px-6 py-5 shadow-md hover:shadow-lg transition-all duration-300">
+      <div className="flex items-start justify-between">
+        {/* Left side */}
+        <div className="flex items-start gap-4">
+          <div className="bg-yellow-400 dark:bg-yellow-300 p-2 rounded-full flex items-center justify-center shadow-sm">
+            <Smile className="w-5 h-5 text-white dark:text-yellow-900" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-yellow-900 dark:text-yellow-100 flex items-center gap-2">
+              <Sparkles className="w-4 h-4" />
+              Fun Health Insight
+            </h3>
+            <p className="text-sm text-yellow-600 dark:text-yellow-400">Not everything's serious 😄</p>
+          </div>
+        </div>
+
+        {/* Refresh Button */}
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing}
+          className="text-yellow-600 dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300 p-2 rounded-full transition"
+          title="Get another tip"
+        >
+          <RefreshCw className={`w-5 h-5 ${refreshing ? "animate-spin" : ""}`} />
+        </button>
       </div>
 
       {/* Tip Text */}
-      <div className="text-sm text-cyan-800 dark:text-cyan-100 px-2 leading-relaxed">
-        <strong>Note:</strong> {tip}
+      <div className="mt-4 text-base text-yellow-900 dark:text-yellow-200 leading-relaxed">
+        <span className="font-semibold">Reminder:</span>{" "}
+        <span>{tip}</span>
       </div>
-
-      {/* Refresh Button */}
-      <button
-        onClick={handleRefresh}
-        disabled={refreshing}
-        className="text-cyan-600 dark:text-cyan-300 hover:text-cyan-800 dark:hover:text-cyan-100 p-2 rounded-full transition"
-        title="New tip"
-      >
-        <RefreshCw className={`w-5 h-5 ${refreshing ? "animate-spin" : ""}`} />
-      </button>
     </div>
   );
 };
