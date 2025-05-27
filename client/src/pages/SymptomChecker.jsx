@@ -157,9 +157,9 @@ const diagnosisText = diagnosisTextLine
       </div>
 
       <Navbar />
-<div className="mt-24" /> 
-      <main className="max-w-7xl mx-auto px-4 pb-20 pt-8">
-        <div className="flex flex-col lg:flex-row gap-6">
+{/* <div className="mt-24 " />  */}
+      <main className="max-w-7xl mx-auto px-4 pb-20 pt-24">
+        <div className="mt-8 flex flex-col lg:flex-row gap-6">
           {/* Info Section */}
           <div className="hidden lg:block lg:w-1/3">
             <div className="sticky top-36">

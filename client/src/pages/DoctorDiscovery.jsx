@@ -3,18 +3,7 @@ import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-const DoctorDiscovery = () => {
-  const [doctors, setDoctors] = useState([]);
-  const [filteredDoctors, setFilteredDoctors] = useState([]);
-  const [search, setSearch] = useState("");
-  const [selectedSpecialization, setSelectedSpecialization] = useState("");
-
-  const [tipIndex, setTipIndex] = useState(0);
-  const [reviewIndex, setReviewIndex] = useState(0);
-
-  const specializations = ["Dermatology", "Cardiology", "Pediatrics", "Neurology", "Orthopedics"];
-
-  const tips = [
+const tips = [
     "💡 Tip: Click on a doctor to learn more about their background and expertise.",
     "🔍 Tip: Use filters to find specialists by category.",
     "📇 Tip: Search by name to quickly locate doctors.",
@@ -30,6 +19,19 @@ const DoctorDiscovery = () => {
     "💬 \"Fast, reliable, and trustworthy doctors.\"",
     "💬 \"Loved how simple it was to navigate and find help.\"",
   ];
+
+const DoctorDiscovery = () => {
+  const [doctors, setDoctors] = useState([]);
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
+  const [search, setSearch] = useState("");
+  const [selectedSpecialization, setSelectedSpecialization] = useState("");
+
+  const [tipIndex, setTipIndex] = useState(0);
+  const [reviewIndex, setReviewIndex] = useState(0);
+
+  const specializations = ["Dermatology", "Cardiology", "Pediatrics", "Neurology", "Orthopedics"];
+
+  
 
   useEffect(() => {
     const fetchDoctors = async () => {

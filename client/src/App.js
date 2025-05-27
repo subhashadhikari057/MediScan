@@ -21,6 +21,7 @@ import ManageUsers from "./pages/ManageUsers";
 import ManageDoctors from "./pages/ManageDoctors";
 import ManageAppointments from "./pages/ManageAppointments";
 import SymptomChecker from "./pages/SymptomChecker"; // Adjust path if needed
+import HealthScan from "./pages/HealthScan";
 
 
 
@@ -89,6 +90,7 @@ function App() {
           <Route
             path="/admin/cleanup-logs"element={<RoleRoute allowedRoles={["admin"]} element={<AdminCleanupLogs />} />}/>
             <Route path="/symptom-checker" element={<SymptomChecker />} />
+            <Route path="/healthscan" element={<HealthScan />} /> {/* ✅ Add this line */}
         </Routes>
       )}
     </Router>
