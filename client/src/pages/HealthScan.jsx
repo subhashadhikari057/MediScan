@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { FileText, Upload, Activity, Download, Loader2, Sun, Moon, X } from "lucide-react";
+import { FileText, Upload, Activity, Download, Loader2, X } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import ReactMarkdown from "react-markdown";
 import Navbar from "components/Navbar";
@@ -15,12 +15,8 @@ const HealthScan = () => {
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
   const [showFull, setShowFull] = useState(false);
-  const [dark, setDark] = useState(false);
 
-  const toggleDark = () => {
-    setDark(!dark);
-    document.documentElement.classList.toggle("dark");
-  };
+
 
   const handleAnalyze = async () => {
     if (mode === "text" && !reportText.trim()) {
@@ -79,18 +75,11 @@ const HealthScan = () => {
 
       <Toaster position="top-right" />
 
-      <button
-        onClick={toggleDark}
-        className="fixed top-4 right-4 z-50 p-2 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-gray-300 dark:border-gray-700"
-      >
-        {dark ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-gray-700" />}
-      </button>
-
       <main className="pt-32 px-4 max-w-6xl mx-auto">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-extrabold">
             <span className="text-teal-600">HealthScan</span> Lab Report{" "}
-            <span className="text-gray-500 dark:text-gray-400">Analyzer</span>
+            <span className="text-gray-700 dark:text-gray-500">Analyzer</span>
           </h1>
           <p className="text-gray-600 dark:text-gray-300 mt-2">
             Upload your lab reports or paste the text to get instant analysis and insights
