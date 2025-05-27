@@ -49,10 +49,6 @@ const staggerContainer = {
 };
 
 const Hero = () => {
-  const scrollTo = (id) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  };
   const navigate = useNavigate();
 
   return (
@@ -86,7 +82,7 @@ const Hero = () => {
           variants={fadeInUp}
           className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8"
         >
-          Use our smart symptom checker or skin scan to get fast, reliable insights. No queues. No confusion.
+          Use our smart symptom checker or HealthScan Analyzer  to get fast, reliable insights. No queues. No confusion.
         </motion.p>
 
         <motion.div
@@ -99,15 +95,20 @@ const Hero = () => {
   <ChevronRight className="h-4 w-4" />
 </Button>
 
-          <Button variant="outline" onClick={() => scrollTo("skin-detector")}>
-            <Camera className="h-5 w-5" />
-            Skin Diagnosis
-            <ChevronRight className="h-4 w-4" />
-          </Button>
+          <Button variant="outline" onClick={() => navigate("/healthscan")}>
+  <Camera className="h-5 w-5" />
+  HealthScan Analyzer
+  <ChevronRight className="h-4 w-4" />
+</Button>
 
-          <Button variant="outline" onClick={() => navigate("/doctors")}>
+         <Button
+  variant="outline"
+  onClick={() => navigate("/doctors")}
+  className="flex items-center justify-center gap-2 px-6 py-3 text-base font-semibold rounded-full border border-cyan-500 text-cyan-400 hover:bg-cyan-500/10"
+>
   <Search className="h-5 w-5" />
   Find Doctor
+  <ChevronRight className="h-4 w-4" />
 </Button>
         </motion.div>
 
