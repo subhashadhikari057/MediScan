@@ -9,6 +9,8 @@ const dashboardRoutes = require("./routes/dashboardRoutes");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/adminRoutes");
 const symptomRoutes = require("./routes/symptomRoutes");
+const healthScanRoutes = require("./routes/healthScanRoutes");
+const healthScanImageRoutes = require("./routes/healthScanImageRoutes");
 
 
 dotenv.config();
@@ -37,6 +39,8 @@ app.use("/api/appointments", appointmentRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/symptom", symptomRoutes);
+app.use("/api/healthscan", healthScanRoutes);
+app.use("/api/healthscan", healthScanImageRoutes);
 
 
 // ✅ Cron job to auto-delete cancelled appointments
